@@ -2,13 +2,6 @@ DROP DATABASE IF EXISTS maxc_dev_localhost;
 
 CREATE DATABASE maxc_dev_localhost;
 USE maxc_dev_localhost;
-CREATE TABLE IF NOT EXISTS User (
-	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-	Name VARCHAR(32) NOT NULL, 
-	Email TEXT(2083) NOT NULL,
-	Password VARCHAR(32) NOT NULL,
-	PhoneNumber VARCHAR(12) NOT NULL DEFAULT '0'
-);
 
 CREATE TABLE IF NOT EXISTS Brand (
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -39,18 +32,186 @@ CREATE TABLE IF NOT EXISTS LinkItemMaterial (
 	MaterialID INT NOT NULL,
 	Ratio INT DEFAULT 0 NOT NULL,
     PRIMARY KEY (ItemID, MaterialID),
-    CONSTRAINT `fk_item_link`
+    CONSTRAINT `fk_link_item_material`
 		FOREIGN KEY (ItemID) REFERENCES Item (ID)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE,
-    CONSTRAINT `fk_material_link`
+    CONSTRAINT `fk_link_material_item`
 		FOREIGN KEY (MaterialID) REFERENCES Material (ID)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE
 );
 
-INSERT INTO Brand (Name) VALUES ("Armani"), ("Tommy Hilfiger");
-INSERT INTO Item (Name, OriginalPrice, BrandID) VALUES ("Hoodie", 56.98, 1);
-INSERT INTO Item (Name, OriginalPrice, BrandID) VALUES ("Tshirt", 46.98, 2);
+CREATE TABLE IF NOT EXISTS Colour (
+	ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(16) NOT NULL
+);
 
-SELECT * FROM Item, Brand;
+CREATE TABLE IF NOT EXISTS LinkItemColour (
+	ItemID INT NOT NULL,
+	ColourID INT NOT NULL,
+    PRIMARY KEY (ItemID, ColourID),
+    CONSTRAINT `fk_link_item_colour`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+    CONSTRAINT `fk_link_colour_item`
+		FOREIGN KEY (ColourID) REFERENCES Colour (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Discount (
+	ItemID INT NOT NULL,
+	ColourID INT NOT NULL,
+    DiscountPercent INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (ItemID, ColourID),
+    CONSTRAINT `fk_link_item_discount`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+    CONSTRAINT `fk_link_colour_discount`
+		FOREIGN KEY (ColourID) REFERENCES Colour (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemTop (
+	ItemID INT NOT NULL PRIMARY KEY,
+    Style ENUM('Hoodie', 'Sweatshirt', 'T-Shirt', 'Polo Shirt', 'Shirt', 'Jumper') NOT NULL,
+    SleeveLength ENUM('No Sleeve', 'Short', 'Long') NOT NULL,
+    CONSTRAINT `fk_top_item`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemJacket (
+	ItemID INT NOT NULL PRIMARY KEY,
+    Length ENUM('Short', 'Thigh Length', 'Knee Length', 'Calf Length') NOT NULL,
+    CONSTRAINT `fk_jacket_top`
+		FOREIGN KEY (ItemID) REFERENCES ItemTop (ItemID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemShirt (
+	ItemID INT NOT NULL PRIMARY KEY,
+    CollarType ENUM('Crewneck', 'V Neck', 'Hooded', 'Buttoned') NOT NULL,
+    Fit ENUM('Slim', 'Muscle', 'Regular', 'Plus Size') NOT NULL,
+    CONSTRAINT `fk_shirt_top`
+		FOREIGN KEY (ItemID) REFERENCES ItemTop (ItemID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemShoe (
+	ItemID INT NOT NULL PRIMARY KEY,
+    Style ENUM('Trainers', 'Boots', 'Sandals', 'Formal', 'Slippers') NOT NULL,
+    Fastener ENUM('Lace', 'Zip', 'Slip On', 'Strap') NOT NULL,
+    CONSTRAINT `fk_shoe_item`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemTrouser (
+	ItemID INT NOT NULL PRIMARY KEY,
+    Style ENUM('Jeans', 'Joggers', 'Leggings', 'Chinos', 'Cargo') NOT NULL,
+    Fit ENUM('Skinny', 'Slim', 'Regular', 'Plus Size') NOT NULL,
+    Width SMALLINT(2) NOT NULL,
+    Length SMALLINT(2) NOT NULL,
+    CONSTRAINT `fk_trouser_item`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS User (
+	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	Name VARCHAR(64) NOT NULL, 
+	Email VARCHAR(128) NOT NULL,
+	Password VARCHAR(32) NOT NULL,
+	PhoneNumber VARCHAR(12) NOT NULL DEFAULT '0'
+);
+
+CREATE TABLE IF NOT EXISTS Purchase (
+	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ItemID INT NOT NULL,
+    ColourID INT NOT NULL,
+    Quantity SMALLINT NOT NULL DEFAULT 1,
+    CONSTRAINT `fk_purchase_item`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+    CONSTRAINT `fk_purchase_colour`
+		FOREIGN KEY (ColourID) REFERENCES Colour (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS LinkPurchaseUser (
+	PurchaseID INT NOT NULL,
+    UserID INT NOT NULL,
+    PurchaseCost DOUBLE NOT NULL,
+    PRIMARY KEY(PurchaseID, UserID),
+    CONSTRAINT `fk_link_purchase_purchase`
+		FOREIGN KEY (PurchaseID) REFERENCES Purchase (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+    CONSTRAINT `fk_link_user_purchase`
+		FOREIGN KEY (UserID) REFERENCES User (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Review (
+	PurchaseID INT NOT NULL PRIMARY KEY,
+    Rating SMALLINT(1) NOT NULL DEFAULT 5,
+    Comment VARCHAR(512),
+    CONSTRAINT `fk_review_purchase`
+		FOREIGN KEY (PurchaseID) REFERENCES Purchase (ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS DeliveryAddress (
+	UserID INT NOT NULL,
+    HouseNumber INT NOT NULL,
+    Street TEXT NOT NULL,
+    City TEXT NOT NULL,
+    PostCode TEXT NOT NULL,
+    CONSTRAINT `fk_deliveryaddress_user`
+		FOREIGN KEY (UserID) REFERENCES User (ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Basket (
+	UserID INT NOT NULL,
+    ItemID INT NOT NULL,
+    ColourID INT NOT NULL,
+    Quantity INT NOT NULL DEFAULT 1,
+    PRIMARY KEY(UserID, ItemID, ColourID),
+    CONSTRAINT `fk_basket_user`
+		FOREIGN KEY (UserID) REFERENCES User (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+    CONSTRAINT `fk_basket_item`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+    CONSTRAINT `fk_basket_colour`
+		FOREIGN KEY (ColourID) REFERENCES Colour (ID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemImage (
+	ItemID INT NOT NULL,
+    Image BLOB NOT NULL,
+    CONSTRAINT `fk_item_image`
+		FOREIGN KEY (ItemID) REFERENCES Item (ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
