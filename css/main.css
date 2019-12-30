@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
+
+body {
+    font-family: 'Anonymous Pro', monospace;
+    background-color: rgb(25, 25, 25);
+    color: rgb(255, 255, 255);
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  color: rgb(240, 240, 240);
+}
+
+button {
+  background-color: rgb(30, 30, 30);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+select {
+  padding: 5px 8px;
+  text-align: left;
+  display: inline-block;
+}
+
+input[type=submit] {
+  background-color: rgb(50, 50, 50);
+  border: none;
+  width: 100%;
+  color: rgb(240, 240, 240);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+}
+
+input[type=submit]:hover {
+  cursor: pointer;
+}
+
+input[type=text]:hover {
+  cursor: text;
+}
+
+#product-count {
+  text-align: center;
+  color: rgb(50, 50, 50);
+}
+
+.item-wrapper {
+    width: 70%;
+    margin: auto;
+    height: inherit;
+}
+.item-image {
+    margin-left: 38%;
+    float: left;
+}
+.item-details {
+    margin-left: 50%;
+}
+
+.menu-container {
+  position: relative;
+  text-align: center;
+}
+
+.menu-text {
+  position: absolute;
+  font-size: 40px;
+  left: 16px;
+  border-style: solid;
+  border-color: rgb(50, 50, 50);
+  border-width: 3px;
+  padding: 5px;
+}
+
+.category-image {
+  display: block;
+  min-width: 19%;
+  max-height: 250px;
+  width: auto;
+  height: auto;
+}
+
+#trouser-main {
+  top: 10px;
+}
+
+#trouser-men {
+  top: 75px;
+}
+
+#trouser-women {
+  top: 140px;
+}
+
+#jacket {
+
+}
+
+#top {
+
+}
+
+#shirt {
+
+}
+
+#shoe {
+
+}
+
+.login {
+  border-style: solid;
+  position: absolute;
+  border-color: rgb(50, 50, 50);
+  padding: 10px 30px;
+  margin: auto;
+  background-color: white;
+}
