@@ -24,21 +24,19 @@ button {
 }
 
 select {
-  padding: 5px 8px;
+  background-color: rgb(25, 25, 25);
+  color: rgb(255, 255, 255);
   text-align: left;
   display: inline-block;
 }
 
 input[type=submit] {
-  background-color: rgb(50, 50, 50);
+  background-color: black;
   border: none;
-  width: 100%;
-  color: rgb(240, 240, 240);
-  padding: 15px 32px;
+  color: white;
+  padding: 2px 4px;
   text-align: center;
-  text-decoration: none;
   display: inline-block;
-  font-size: 15px;
 }
 
 input[type=submit]:hover {
@@ -51,20 +49,46 @@ input[type=text]:hover {
 
 #product-count {
   text-align: center;
-  color: rgb(50, 50, 50);
+  color: rgb(120, 120, 120);
+}
+
+.top-bar {
+  width: 100%;
+  text-align: right;
+  display:block;
+  font-size: 14pt;
+  background-color: black;
+}
+
+.red {
+  color: rgb(240, 0, 0);
+}
+
+.notif {
+  width: 100%;
+  display:block;
+  text-align: center;
+}
+
+#good {
+background-color: rgb(0, 100, 0);
+}
+
+#bad {
+  background-color: rgb(200, 0, 0);
 }
 
 .item-wrapper {
-    width: 70%;
-    margin: auto;
-    height: inherit;
+  width: 70%;
+  margin: auto;
+  height: inherit;
 }
 .item-image {
-    margin-left: 38%;
-    float: left;
+  margin-left: 38%;
+  float: left;
 }
 .item-details {
-    margin-left: 50%;
+  margin-left: 50%;
 }
 
 .menu-container {
