@@ -27,8 +27,10 @@
         if ($valid) {
           require_once('userdb.php');
           if (isValidUser($email, $password)) {
-            $error = "User: " . getUsername($email);
-            //send user to product list page
+            $name = getUsername($email);
+            setcookie("user", $name, time()+86400); //keeps user for 1 day
+            header("Location: products.php");
+            exit();
 
           } else {
             $error = "Invalid user credentials.";
@@ -37,10 +39,9 @@
 
       }
     ?>
-    <h1>I DONT KNOW</h1>
+    <h1>User Login</h1>
     <hr>
 
-    <h2>User Login</h2>
     <div class="login">
       <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         Email:<br>

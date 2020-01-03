@@ -15,9 +15,8 @@ function isValidUser($email, $password) {
 
 function getUsername($email) {
   global $conn;
-  $result = $conn->query("SELECT username FROM User WHERE Email = '$email'");
+  $result = $conn->query("SELECT Username FROM User WHERE Email = '$email'");
   if ($result->num_rows > 0) {
-    // output data of each row
     while($row = $result->fetch_assoc()) {
         return $row["Username"];
     }
