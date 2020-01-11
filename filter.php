@@ -1,4 +1,21 @@
 <?php
+
+  /*
+    this class contains all the code for the Filter class and the subclasses
+    that inherit it. the Filter class is the default filter for filtering
+    product results. Fitler is used for static filters such as gender when the
+    only values are Male or Female.
+
+    ActiveFilter is a subclass of Filter which only shows filters if they
+    are in use. For example if there are no Hoodies in stock, it won't list
+    Hoodies as an option.
+
+    ConditionalFilter is also a subclsas of Filter which will only display the
+    filter if it's parent category is available. For example if you had the
+    parent category be "Shoes", it won't display filters for Sleeve Length. But
+    if the Hoodies category is selected, Sleeve length will show.
+  */
+
   class Filter {
     public $name;
     public $table;
